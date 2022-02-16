@@ -18,6 +18,7 @@ https://www.figma.com/file/QvwxjX8TKD5S6nm3hmxBPN/Untitled?node-id=5%3A24
 
 * iOS
 	* Swift
-	* 고민중
 * Backend
-	* 고민중
+	* Firebase database
+* Crawling
+	* Python
