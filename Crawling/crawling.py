@@ -28,8 +28,20 @@ def fmKorea():
             shipPrice = dealInfo[2].strip().split(':')[1].strip()
             dealInfos.append((mall, itemPrice, shipPrice))
         for i in range(0, count):
-            print(titles[i], dealInfos[i])
+            #print(titles[i], dealInfos[i])
+            titles
     else:
         print(response.status_code)
 
+def ppomppu():
+    response = requests.get(urlList[1])
+    if response.status_code == 200:
+        html = response.text
+        soup = BeautifulSoup(html, 'html.parser')
+        dealInfos_elem = soup.select('div > a > font.list_title')
+        dealInfos = []
+        for dealInfo in dealInfos_elem:
+            print(dealInfo.text)
+
 fmKorea()
+ppomppu()
