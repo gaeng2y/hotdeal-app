@@ -6,6 +6,7 @@ urlList = ['https://www.fmkorea.com/index.php?mid=hotdeal&category=1196845284',
             'https://eomisae.co.kr/os']
 
 def fmKorea():
+    host = 'https://fmkorea.com'
     response = requests.get(urlList[0])
     if response.status_code == 200:
         html = response.text
@@ -15,35 +16,34 @@ def fmKorea():
 
         thumbnails = []
         titles = []
+        mall = []
         itemPrices = []
         shippingPrices = []
         urls = []
 
         for item in itemLists:
-            thumbnail = item.find('img')
-            print(thumbnail)
-            
-
-        # title_elem = soup.select('li.li.li_best2_pop0 > div.li > h3.title > a.hotdeal_var8')
-        # dealInfo_elem = soup.select('li.li.li_best2_pop0 > div.li > div.hotdeal_info')
-        # thumbnail_elem = soup.select('img.class')
-        # count = len(title_elem)
-        # # 제목 가져오기
-        # titles = []
-        # for title in title_elem:
-        #     text = title.text.split('[')[0]
-        #     titles.append(text.strip())
-        # # 핫딜 정보 가져오기
-        # dealInfos = []
-        # for deal in dealInfo_elem:
-        #     dealInfo = deal.text.split('/')
-        #     mall = dealInfo[0].strip().split(':')[1].strip()
-        #     itemPrice = dealInfo[1].strip().split(':')[1].strip()
-        #     shipPrice = dealInfo[2].strip().split(':')[1].strip()
-        #     dealInfos.append((mall, itemPrice, shipPrice))
-        # for i in range(0, count):
-        #     #print(titles[i], dealInfos[i])
-        #     titles
+            # 썸네일 가져오기
+            imgTag = item.find('img')
+            if imgTag != None:
+                thumbnailUrl = 'https:' + imgTag.attrs['data-original']
+                thumbnails.append(thumbnailUrl)
+            else:
+                thumbnails.append("")
+            # 제목 가져오기
+            titleTag = item.find('h3')
+            title = titleTag.text.split('[')[0].strip()
+            titles.append(title)
+            itemLink = host + titleTag.find('a').attrs['href']
+            urls.append(itemLink)
+            # 쇼핑몰/가격/배송비
+            infoTag = item.select('div.hotdeal_info > span')
+            infos = []
+            for info in infoTag:
+                detailInfo = info.text.strip().split(':')[1].strip()
+                infos.append(detailInfo)
+            mall.append(infos[0])
+            itemPrices.append(infos[1])
+            shippingPrices.append(infos[2])
     else:
         print(response.status_code)
 
