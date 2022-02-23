@@ -1,3 +1,5 @@
+from cmath import atan
+import enum
 import requests
 from bs4 import BeautifulSoup
 
@@ -6,7 +8,7 @@ urlList = ['https://www.fmkorea.com/index.php?mid=hotdeal&category=1196845284',
             'https://eomisae.co.kr/os']
 
 def fmKorea():
-    host = 'https://fmkorea.com'
+    host = 'https://www.fmkorea.com'
     response = requests.get(urlList[0])
     if response.status_code == 200:
         html = response.text
@@ -52,13 +54,15 @@ def ppomppu():
     if response.status_code == 200:
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
-        dealInfos_elem = soup.select('div > a > font.list_title')
-        dealInfos = []
-        titles = []
-        malls = []
-        itemPrices = []
-        for dealInfo in dealInfos_elem:
-            print(dealInfo.text)
-
-fmKorea()
-#ppomppu()
+        itemLists = soup.findAll('tr', {'class': ['list0', 'list1']})
+        for idx, itemList in enumerate(itemLists, 1):
+            tableTag = itemList.find('table')
+            aTag = tableTag.find('a')
+            url = 'https://www.ppomppu.co.kr/zboard/' + aTag.attrs['href']
+            imgTag = aTag.find('img')
+            thumbnailUrl = 'https:' + imgTag.attrs['src']
+            print(url)
+            print(thumbnailUrl)
+            
+#fmKorea()
+ppomppu()
