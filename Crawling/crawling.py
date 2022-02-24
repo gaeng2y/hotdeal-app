@@ -56,13 +56,19 @@ def ppomppu():
         soup = BeautifulSoup(html, 'html.parser')
         itemLists = soup.findAll('tr', {'class': ['list0', 'list1']})
         for idx, itemList in enumerate(itemLists, 1):
+            itemGroup = itemList.select('td.list_vspace > div > span')
+            print(itemGroup)
             tableTag = itemList.find('table')
             aTag = tableTag.find('a')
             url = 'https://www.ppomppu.co.kr/zboard/' + aTag.attrs['href']
             imgTag = aTag.find('img')
             thumbnailUrl = 'https:' + imgTag.attrs['src']
-            print(url)
-            print(thumbnailUrl)
+            #print(url)
+            #print(thumbnailUrl)
+            # 글번호 숫자인 것만가져오기
+            
+            #print(tableTag.find('font').text)
+            #print(dealInfoTag)
             
 #fmKorea()
 ppomppu()
