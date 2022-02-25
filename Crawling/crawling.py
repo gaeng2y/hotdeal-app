@@ -1,8 +1,10 @@
 from cmath import atan
 import enum
+from posixpath import split
 import requests
 from bs4 import BeautifulSoup
 
+# 제목 / url / 썸네일만 가져오기!
 urlList = ['https://www.fmkorea.com/index.php?mid=hotdeal&category=1196845284',
             'https://www.ppomppu.co.kr/zboard/zboard.php?id=ppomppu&category=12',
             'https://eomisae.co.kr/os']
@@ -56,8 +58,6 @@ def ppomppu():
         soup = BeautifulSoup(html, 'html.parser')
         itemLists = soup.findAll('tr', {'class': ['list0', 'list1']})
         for idx, itemList in enumerate(itemLists, 1):
-            itemGroup = itemList.select('td.list_vspace > div > span')
-            print(itemGroup)
             tableTag = itemList.find('table')
             aTag = tableTag.find('a')
             url = 'https://www.ppomppu.co.kr/zboard/' + aTag.attrs['href']
@@ -66,9 +66,13 @@ def ppomppu():
             #print(url)
             #print(thumbnailUrl)
             # 글번호 숫자인 것만가져오기
-            
-            #print(tableTag.find('font').text)
-            #print(dealInfoTag)
+            dealInfo = (tableTag.find('font').text)
+            splitDealInfo = dealInfo.split(']')
+            mall = ""
+            if splitDealInfo[0][0] == '[':
+                mall = splitDealInfo[0][1:]
+            print(mall)
+            #print(splitDealInfo)
             
 #fmKorea()
 ppomppu()
