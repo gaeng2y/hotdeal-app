@@ -20,9 +20,6 @@ def fmKorea():
 
         thumbnails = []
         titles = []
-        mall = []
-        itemPrices = []
-        shippingPrices = []
         urls = []
 
         for item in itemLists:
@@ -40,14 +37,14 @@ def fmKorea():
             itemLink = host + titleTag.find('a').attrs['href']
             urls.append(itemLink)
             # 쇼핑몰/가격/배송비
-            infoTag = item.select('div.hotdeal_info > span')
-            infos = []
-            for info in infoTag:
-                detailInfo = info.text.strip().split(':')[1].strip()
-                infos.append(detailInfo)
-            mall.append(infos[0])
-            itemPrices.append(infos[1])
-            shippingPrices.append(infos[2])
+            # infoTag = item.select('div.hotdeal_info > span')
+            # infos = []
+            # for info in infoTag:
+            #     detailInfo = info.text.strip().split(':')[1].strip()
+            #     infos.append(detailInfo)
+            # mall.append(infos[0])
+            # itemPrices.append(infos[1])
+            # shippingPrices.append(infos[2])
     else:
         print(response.status_code)
 
@@ -56,23 +53,33 @@ def ppomppu():
     if response.status_code == 200:
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
+
+        thumbnails = []
+        titles = []
+        urls = []
+
         itemLists = soup.findAll('tr', {'class': ['list0', 'list1']})
         for idx, itemList in enumerate(itemLists, 1):
             tableTag = itemList.find('table')
             aTag = tableTag.find('a')
             url = 'https://www.ppomppu.co.kr/zboard/' + aTag.attrs['href']
+            urls.append(url)
             imgTag = aTag.find('img')
             thumbnailUrl = 'https:' + imgTag.attrs['src']
-            #print(url)
-            #print(thumbnailUrl)
+            thumbnails.append(thumbnailUrl)
             # 글번호 숫자인 것만가져오기
-            dealInfo = (tableTag.find('font').text)
-            splitDealInfo = dealInfo.split(']')
-            mall = ""
-            if splitDealInfo[0][0] == '[':
-                mall = splitDealInfo[0][1:]
-            print(mall)
-            #print(splitDealInfo)
+            title = tableTag.find('font').text.strip()
+            titles.append(title)
+    else:
+        print(response.status_code)
+
+def eomisae():
+    response = requests.get(urlList[2])
+    if response.status_code == 200:
+        html = response.text
+        soup = BeautifulSoup(html, 'html.parser')
+    else:
+        print(response.status_code)
             
 #fmKorea()
 ppomppu()
