@@ -78,8 +78,22 @@ def eomisae():
     if response.status_code == 200:
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
+        
+        thumbnails = []
+        titles = []
+        urls = []
+
+        itemLists = soup.select('div.card_el.n_ntc.clear')
+        for item in itemLists:
+            tmb = item.find('img', {'class': 'tmb'}).attrs['src']
+            if 'crop' in tmb:
+                thumbnails.append(tmb)
+            else:
+                thumbnails.append('')
+
     else:
         print(response.status_code)
             
 #fmKorea()
-ppomppu()
+#ppomppu()
+eomisae()
