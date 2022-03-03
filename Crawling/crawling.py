@@ -90,7 +90,8 @@ def eomisae():
                 thumbnails.append(tmb)
             else:
                 thumbnails.append('')
-
+            aTag = item.find('a', {'class' : 'pjax'})
+            print(aTag)
     else:
         print(response.status_code)
             
