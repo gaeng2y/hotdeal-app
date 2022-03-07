@@ -1,8 +1,13 @@
 from cmath import atan
 import enum
 from posixpath import split
+from pip import main
 import requests
 from bs4 import BeautifulSoup
+
+thumbnails = []
+titles = []
+urls = []
 
 # 제목 / url / 썸네일만 가져오기!
 urlList = ['https://www.fmkorea.com/index.php?mid=hotdeal&category=1196845284',
@@ -17,11 +22,6 @@ def fmKorea():
         soup = BeautifulSoup(html, 'html.parser')
         # select 정의하기
         itemLists = soup.select('li.li.li_best2_pop0')
-
-        thumbnails = []
-        titles = []
-        urls = []
-
         for item in itemLists:
             # 썸네일 가져오기
             imgTag = item.find('img')
@@ -36,15 +36,6 @@ def fmKorea():
             titles.append(title)
             itemLink = host + titleTag.find('a').attrs['href']
             urls.append(itemLink)
-            # 쇼핑몰/가격/배송비
-            # infoTag = item.select('div.hotdeal_info > span')
-            # infos = []
-            # for info in infoTag:
-            #     detailInfo = info.text.strip().split(':')[1].strip()
-            #     infos.append(detailInfo)
-            # mall.append(infos[0])
-            # itemPrices.append(infos[1])
-            # shippingPrices.append(infos[2])
     else:
         print(response.status_code)
 
@@ -53,10 +44,6 @@ def ppomppu():
     if response.status_code == 200:
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
-
-        thumbnails = []
-        titles = []
-        urls = []
 
         itemLists = soup.findAll('tr', {'class': ['list0', 'list1']})
         for idx, itemList in enumerate(itemLists, 1):
@@ -91,10 +78,20 @@ def eomisae():
             else:
                 thumbnails.append('')
             aTag = item.find('a', {'class' : 'pjax'})
-            print(aTag)
+            url = aTag.attrs['href']
+            urls.append(url)
+            title = aTag.text
+            titles.append(title)
     else:
         print(response.status_code)
             
-#fmKorea()
-#ppomppu()
-eomisae()
+def main():
+    fmKorea()
+    ppomppu()
+    eomisae()
+
+if __name__ == "__main__":
+    main()
+else:
+    print("임포트")
+    main()
