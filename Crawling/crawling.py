@@ -92,6 +92,7 @@ def main():
 
 if __name__ == "__main__":
     main()
+    print(thumbnails, titles, urls)
 else:
     print("임포트")
     main()
