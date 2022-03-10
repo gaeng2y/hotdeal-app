@@ -4,6 +4,7 @@ from posixpath import split
 from pip import main
 import requests
 from bs4 import BeautifulSoup
+import storeFirebase
 
 thumbnails = []
 titles = []
@@ -92,7 +93,9 @@ def main():
 
 if __name__ == "__main__":
     main()
-    print(thumbnails, titles, urls)
+    storeFirebase.setup()
+    for i in range(0, len(titles)):
+        storeFirebase.update(titles[i], thumbnails[i], urls[i])
 else:
     print("임포트")
     main()
