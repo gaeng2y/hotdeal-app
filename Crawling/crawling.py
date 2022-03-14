@@ -4,7 +4,7 @@ from posixpath import split
 from pip import main
 import requests
 from bs4 import BeautifulSoup
-import storeFirebase
+import firebase as fb
 
 thumbnails = []
 titles = []
@@ -40,26 +40,26 @@ def fmKorea():
     else:
         print(response.status_code)
 
-def ppomppu():
-    response = requests.get(urlList[1])
-    if response.status_code == 200:
-        html = response.text
-        soup = BeautifulSoup(html, 'html.parser')
+# def ppomppu():
+#     response = requests.get(urlList[1])
+#     if response.status_code == 200:
+#         html = response.text
+#         soup = BeautifulSoup(html, 'html.parser')
 
-        itemLists = soup.findAll('tr', {'class': ['list0', 'list1']})
-        for idx, itemList in enumerate(itemLists, 1):
-            tableTag = itemList.find('table')
-            aTag = tableTag.find('a')
-            url = 'https://www.ppomppu.co.kr/zboard/' + aTag.attrs['href']
-            urls.append(url)
-            imgTag = aTag.find('img')
-            thumbnailUrl = 'https:' + imgTag.attrs['src']
-            thumbnails.append(thumbnailUrl)
-            # 글번호 숫자인 것만가져오기
-            title = tableTag.find('font').text.strip()
-            titles.append(title)
-    else:
-        print(response.status_code)
+#         itemLists = soup.findAll('tr', {'class': ['list0', 'list1']})
+#         for idx, itemList in enumerate(itemLists, 1):
+#             tableTag = itemList.find('table')
+#             aTag = tableTag.find('a')
+#             url = 'https://www.ppomppu.co.kr/zboard/' + aTag.attrs['href']
+#             urls.append(url)
+#             imgTag = aTag.find('img')
+#             thumbnailUrl = 'https:' + imgTag.attrs['src']
+#             thumbnails.append(thumbnailUrl)
+#             # 글번호 숫자인 것만가져오기
+#             title = tableTag.find('font').text.strip()
+#             titles.append(title)
+#     else:
+#         print(response.status_code)
 
 def eomisae():
     response = requests.get(urlList[2])
@@ -88,14 +88,15 @@ def eomisae():
             
 def main():
     fmKorea()
-    ppomppu()
+    # ppomppu()
     eomisae()
 
 if __name__ == "__main__":
     main()
-    storeFirebase.setup()
+    fb.setup()
     for i in range(0, len(titles)):
-        storeFirebase.update(titles[i], thumbnails[i], urls[i])
+        fb.update(titles[i], thumbnails[i], urls[i])
+    fb.get()
 else:
     print("임포트")
     main()

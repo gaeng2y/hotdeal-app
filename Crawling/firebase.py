@@ -11,8 +11,12 @@ def setup():
 
 def update(title, thumbnail, url):
     dir = db.reference()
-    dir.update({"title": title,
+    dir.push({"title": title,
                 "thumbnail": thumbnail,
                 "url": url
                 })
 
+def get():
+    dir = db.reference()
+    data = dir.get('/')
+    print(data[0])
