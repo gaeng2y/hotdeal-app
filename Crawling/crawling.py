@@ -5,10 +5,15 @@ from pip import main
 import requests
 from bs4 import BeautifulSoup
 import firebase as fb
+import multiprocessing
 
-thumbnails = []
-titles = []
-urls = []
+STORE = 'store'
+TITLE = 'title'
+THUMBNAIL = 'thumbnail'
+URL = 'url'
+FMKOREA = 'fmkorea'
+EOMISAE = 'emoisae'
+datas = []
 
 # 제목 / url / 썸네일만 가져오기!
 urlList = ['https://www.fmkorea.com/index.php?mid=hotdeal&category=1196845284',
@@ -26,17 +31,19 @@ def fmKorea():
         for item in itemLists:
             # 썸네일 가져오기
             imgTag = item.find('img')
+            thumbnail = ""
             if imgTag != None:
                 thumbnailUrl = 'https:' + imgTag.attrs['data-original']
-                thumbnails.append(thumbnailUrl)
-            else:
-                thumbnails.append("")
+                thumbnail = thumbnailUrl
             # 제목 가져오기
             titleTag = item.find('h3')
             title = titleTag.text.split('[')[0].strip()
-            titles.append(title)
             itemLink = host + titleTag.find('a').attrs['href']
-            urls.append(itemLink)
+            data = {STORE : FMKOREA,
+                    TITLE : title,
+                    THUMBNAIL : thumbnail,
+                    URL : itemLink}
+            datas.append(data)
     else:
         print(response.status_code)
 
@@ -74,19 +81,23 @@ def eomisae():
         itemLists = soup.select('div.card_el.n_ntc.clear')
         for item in itemLists:
             tmb = item.find('img', {'class': 'tmb'}).attrs['src']
+            thumbnail = ''
             if 'crop' in tmb:
-                thumbnails.append(tmb)
-            else:
-                thumbnails.append('')
+                thumbnail = tmb
             aTag = item.find('a', {'class' : 'pjax'})
             url = aTag.attrs['href']
-            urls.append(url)
             title = aTag.text
-            titles.append(title)
+            data = {STORE : EOMISAE,
+                    TITLE : title,
+                    THUMBNAIL : thumbnail,
+                    URL : url}
+            datas.append(data)
     else:
         print(response.status_code)
             
 def main():
+    pool = multiprocessing.Pool(processes = 2)
+    
     fmKorea()
     # ppomppu()
     eomisae()
