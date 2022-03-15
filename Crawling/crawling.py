@@ -1,5 +1,7 @@
 from cmath import atan
+from ctypes.wintypes import tagMSG
 import enum
+import multiprocessing
 from posixpath import split
 from pip import main
 import requests
@@ -96,18 +98,20 @@ def eomisae():
         print(response.status_code)
             
 def main():
-    pool = multiprocessing.Pool(processes = 2)
-    
+    # p1 = multiprocessing.Process(target=fmKorea)
+    # p2 = multiprocessing.Process(target=eomisae)
+    # p1.start()
+    # p2.start()
+    # p1.join()
+    # p2.join()
     fmKorea()
-    # ppomppu()
     eomisae()
 
 if __name__ == "__main__":
     main()
     fb.setup()
-    for i in range(0, len(titles)):
-        fb.update(titles[i], thumbnails[i], urls[i])
-    fb.get()
+    for i in range(0, len(datas)):
+        fb.update(datas[i])
 else:
     print("임포트")
     main()

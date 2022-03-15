@@ -8,11 +8,11 @@ def setup():
         'databaseURL' : 'https://fashion-hotdeal-default-rtdb.firebaseio.com/'   
     })
 
-def update(title, thumbnail, url):
+def update(data):
     dir = db.reference()
-    dir.push({"title": title,
-                "thumbnail": thumbnail,
-                "url": url
+    dir.child('obejcts').push({"title": data['title'],
+                "thumbnail": data['thumbnail'],
+                "url": data['url']
                 })
 
 def get():
